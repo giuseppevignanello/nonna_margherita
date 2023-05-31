@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 
@@ -15,7 +16,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -25,7 +27,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.products.create');
     }
 
     /**
@@ -36,7 +38,19 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+
+        $data = [
+            "name" => $request->name,
+            "price" => $request->price,
+            "image" => $request->image,
+            "in_stock" => $request->in_stock,
+            "weight" => $request->weigth,
+            "product_code" => $request->product_code,
+            "description" => $request->description,
+        ];
+
+        Product::create($data);
+        return to_route('admin.products.index')->with('message', 'Product added successfully');
     }
 
     /**
@@ -47,7 +61,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return view('admin.products.show', compact('product'));
     }
 
     /**
@@ -58,7 +72,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('admin.products.edit', compact('product'));
     }
 
     /**
@@ -70,7 +84,18 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $data = [
+            "name" => $request->name,
+            "price" => $request->price,
+            "image" => $request->image,
+            "in_stock" => $request->in_stock,
+            "weight" => $request->weigth,
+            "product_code" => $request->product_code,
+            "description" => $request->description,
+        ];
+
+        $product->update($data);
+        return to_route('admin.products.index')->with('message', 'Product modified successfully');
     }
 
     /**
